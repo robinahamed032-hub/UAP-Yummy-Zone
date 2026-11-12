@@ -1,0 +1,105 @@
+from django.shortcuts import render, redirect
+#from inventory_app.models import InventoryItem
+def index(request):
+    return render(request, 'index.html')
+
+# Signup page
+def signup(request):
+    return render(request, 'signup.html')
+
+# Student Stuff page
+def student_stuff(request):
+    return render(request, 'student_stuff.html')
+
+# Student Login
+def login_student(request):
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # Example authentication
+        if username == "student" and password == "12345":
+            return redirect('student_home')
+        else:
+            error = "Invalid username or password"
+            return render(request, 'login_student.html', {'error': error})
+    return render(request, 'login_student.html')
+
+# Student Home page
+def student_home(request):
+    return render(request, 'student.html')
+
+# Staff Login
+def login_staff(request):
+    if request.method == "POST":
+        username = request.POST.get('username')
+
+        password = request.POST.get('password')
+        if username == "staff" and password == "12345":
+            return redirect('staff_home')
+        else:
+            error = "Invalid username or password"
+            return render(request, 'login_staff.html', {'error': error})
+
+    return render(request, 'login_staff.html')
+
+def staff_home(request):
+    return render(request, 'staff.html')
+def student_orders(request):
+    # Example data
+    orders = [
+        {'order': 'Burger', 'date': '2025-10-15', 'status': 'Delivered', 'amount': '120'},
+        {'order': 'Pizza', 'date': '2025-10-14', 'status': 'Pending', 'amount': '200'},
+        {'order': 'Salad', 'date': '2025-10-13', 'status': 'Cancelled', 'amount': '60'},
+    ]
+    return render(request, 'student_orders.html', {'orders': orders})
+def student_loyalty(request):
+    # Example data for now
+    current_points = 240
+    current_level = "Silver"
+    next_level = "Gold"
+    points_to_next = 260
+    progress_percent = (current_points / 500) * 100  # Example logic
+
+    context = {
+        'current_points': current_points,
+        'current_level': current_level,
+        'next_level': next_level,
+        'points_to_next': points_to_next,
+        'progress_percent': progress_percent,
+    }
+
+    return render(request, 'student_loyalty.html', context)
+
+def staff_inventory(request):
+    # Fetch all inventory items from the database
+    inventory_items = InventoryItem.objects.all()
+
+    # Render the inventory page
+    return render(request, 'staff_inventory.html', {'inventory_items': inventory_items})
+
+def update_inventory(request, item_id):
+    try:
+        item = InventoryItem.objects.get(id=item_id)
+    except InventoryItem.DoesNotExist:
+        return redirect('staff_inventory')
+
+    if request.method == 'POST':
+        new_quantity = request.POST.get('quantity')
+        if new_quantity.isdigit():
+            item.quantity = int(new_quantity)
+            item.save()
+        return redirect('staff_inventory')
+
+    return render(request, 'update_inventory.html', {'item': item})
+from django.shortcuts import render
+
+def staff_menu(request):
+
+    menu_items = InventoryItem.objects.all()
+
+    return render(request, 'staff_menu.html', {'menu_items': menu_items})
+
+
+def student(request):
+    return render(request, 'student.html')

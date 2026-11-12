@@ -1,0 +1,18 @@
+<h1>Inventory</h1>
+
+<ul>
+{% for item in inventory_items %}
+    <li>
+        {{ item.name }} — Quantity: {{ item.quantity }}, Reorder Level: {{ item.reorder_level }}
+        {% if item.quantity < item.reorder_level %}
+            <strong style="color:red;">Low Stock!</strong>
+        {% endif %}
+        <a href="{% url 'update_inventory' item.id %}">Edit</a>
+    </li>
+{% empty %}
+    <li>No items in inventory.</li>
+{% endfor %}
+</ul>
+
+<!-- Notification badge in nav bar -->
+<p>Low Stock Count: {{ low_stock_count }}</p>

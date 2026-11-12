@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+  <meta charset="UTF-8">
+  <title>Menu Manager - UAP Yummy Zone</title>
+  <link rel="stylesheet" href="{% static 'staff_menu.css' %}">
+</head>
+<body>
+  <h1>🍽️ Menu Manager</h1>
+  <a href="{% url 'add_food' %}" class="add-btn">➕ Add New Food</a>
+  <a href="{% url 'logout' %}" class="logout-btn">🔓 Logout</a>
+
+  <table>
+    <tr>
+      <th>Image</th><th>Name</th><th>Price</th><th>Description</th><th>Actions</th><th>Quantity</th>
+    </tr>
+    {% for food in foods %}
+    <tr>
+      <td>
+        {% if food.image %}
+        <img src="{{ food.image.url }}" width="80">
+        {% endif %}
+      </td>
+      <td>{{ food.name }}</td>
+      <td>{{ food.price }} ৳</td>
+      <td>{{ food.description|truncatechars:30 }}</td>
+         <td>{{ food.quantity }}</td>
+      <td>
+        <a href="{% url 'edit_food' food.id %}">✏️ Edit</a>
+        <a href="{% url 'delete_food' food.id %}" onclick="return confirm('Delete this item?')">🗑️ Delete</a>
+      </td>
+    </tr>
+    {% empty %}
+      <tr><td colspan="5">No items added yet 🍔</td></tr>
+    {% endfor %}
+  </table>
+</body>
+</html>

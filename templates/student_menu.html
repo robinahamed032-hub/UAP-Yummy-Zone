@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu - UAP Yummy Zone</title>
+  <link rel="stylesheet" href="{% static 'student.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="logo">UAP Yummy Zone</div>
+    <ul>
+      <li><a href="{% url 'student_home' %}"><i class="fa fa-home"></i> Home</a></li>
+      <li><a href="{% url 'student_menu' %}"><i class="fa fa-utensils"></i> Menu</a></li>
+      <li><a href="{% url 'student_orders' %}"><i class="fa fa-box"></i> My Orders</a></li>
+      <li><a href="{% url 'student_loyalty' %}"><i class="fa fa-star"></i> Loyalty Points</a></li>
+      <li><a href="{% url 'index' %}"><i class="fa fa-sign-out"></i> Logout</a></li>
+    </ul>
+  </nav>
+
+   <section class="hero">
+    <h1>Our Menu 🍽️</h1>
+    <p>Check out our delicious offerings!</p>
+
+    <div class="menu-list">
+      {% for item in foods %}
+        <div class="menu-item">
+          {% if item.image %}
+            <img src="{{ item.image.url }}" width="220" height="150" alt="{{ item.name }}"><br>
+          {% endif %}
+          <h3>{{ item.name }}</h3>
+          <p>{{ item.description }}</p>
+          <p><strong>Price:</strong> {{ item.price }} BDT</p>
+            <p><strong>Available Quantity:</strong> {{ item.quantity }}</p>
+          <a href="{% url 'order_food' item.id %}" class="order-btn">Order Now</a>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+
+</body>
+</html>
